@@ -180,18 +180,7 @@ The 2 warnings report the 20 negative overtime rows and 9 negative salary rows i
 
 ---
 
-## 10. Known issues / to do
-
-- [ ] **Drop the unused `EMP_HIGH_OVERTIME` table.** It's left over from an earlier 95th-percentile rule. dbt no longer builds it, and nothing reads from it now that the access views use `QRT_HIGH_OT`.
-- [ ] **Make the daily task load only the newest file,** so extra files in the stage can't duplicate rows.
-- [ ] **Schedule `dbt build`** after the daily load, so the marts refresh automatically.
-- [ ] Add `{{ config(grants={'select': ['PUBLIC_ANALYST']}) }}` to the two department models so grants survive rebuilds.
-- [ ] Move `DEPT_HEAD_MAPPING` into a dbt seed (`seeds/dept_head_mapping.csv`) with `unique` and `not_null` tests on `user_name`.
-- [ ] Optional: compute the IQR fence only on `overtime > 0` (see Limitations).
-
----
-
-## 11. Common commands
+## 10. Common commands
 
 ```bash
 dbt build                         # build all models and run all tests, in dependency order
