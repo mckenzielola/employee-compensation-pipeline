@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  - name: dept_ot_salary_total
+    description: Total overtime and salaries per department and year
+    data_tests:
+      # one row per department per year
+      - unique:
+          column_name: "department_code || '-' || year"
+    columns:
+      - name: department_code
+        data_tests:
+          - not_null
+      - name: year
+        data_tests:
+          - not_null
+
+  - name: dept_ot_salary_normalized
+    description: Overtime and salaries per employee, by department and year
+    data_tests:
+      - unique:
+          column_name: "department_code || '-' || year"
+    columns:
+      - name: department_code
+        data_tests:
+          - not_null
+      - name: year
+        data_tests:
+          - not_null
+
+  - name: qrt_high_ot
+    description: >
+      Employees above the upper fence (Q3 + 1.5 x IQR) for their department, job and year,
+      whose overtime / salary is at or above the citywide 75th percentile
+    data_tests:
+      - expression_is_true:
+          name: qrt_high_ot_above_fence
+          expression: "overtime > threshold"
+      - expression_is_true:
+          name: qrt_high_ot_ratio_above_cutoff
+          expression: "ot_salary_ratio >= ot_salary_cutoff"
+      - expression_is_true:
+          name: qrt_high_ot_positive_pay
+          expression: "overtime > 0 and salaries > 0"
+    columns:
+      - name: employee_identifier
+        data_tests:
+          - not_null
+      - name: department_code
+        data_tests:
+          - not_null

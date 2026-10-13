@@ -1,0 +1,12 @@
+employee_comp:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: ""
+      user: ""
+      role: ACCOUNTADMIN
+      warehouse: COMPUTE_WH
+      database: EMPLOYEE_DB
+      schema: PUBLIC
+      threads: 8

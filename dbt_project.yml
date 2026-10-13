@@ -1,0 +1,22 @@
+name: employee_comp
+version: 1.0.0
+config-version: 2
+profile: employee_comp
+model-paths:
+  - models
+analysis-paths:
+  - analyses
+test-paths:
+  - tests
+seed-paths:
+  - seeds
+macro-paths:
+  - macros
+snapshot-paths:
+  - snapshots
+models:
+  employee_comp:
+    staging:
+      +materialized: view
+    marts:
+      +materialized: table

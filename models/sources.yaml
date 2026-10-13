@@ -1,0 +1,22 @@
+version: 2
+
+sources:
+  - name: employee_raw
+    description: >
+      City and County of San Francisco employee compensation, loaded daily from
+      s3://ccsf-employee-compensation/datasets/ by the LOAD_EMPLOYEE_COMP_DAILY task
+      (see setup/pipeline_setup.sql).
+    database: EMPLOYEE_DB
+    schema: PUBLIC
+    tables:
+      - name: EMPLOYEE_COMP
+        description: Raw employee compensation, one row per employee, job, department and year (Fiscal and Calendar rows)
+        columns:
+          - name: employee_identifier
+            description: Employee name; older years hold a numeric ID instead, from a system migration
+          - name: overtime
+            description: Overtime pay. Negative values are payroll adjustments for other periods.
+          - name: data_as_of
+            description: Stored as the original CSV text (e.g. '2026 Oct 04 11:22:41 PM'), not converted
+          - name: data_loaded_at
+            description: Stored as the original CSV text (e.g. '2026/10/05 05:26:36 AM'), not converted

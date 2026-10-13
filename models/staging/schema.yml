@@ -1,0 +1,49 @@
+version: 2
+
+models:
+  - name: stg_employee_comp
+    description: Cleaned employee compensation, calendar-year rows only
+    data_tests:
+      # total compensation should equal salary + benefits (allow $1 rounding)
+      - expression_is_true:
+          expression: "abs(total_salary + total_benefits - total_compensation) <= 1"
+      # negative pay exists as payroll adjustments, so warn instead of fail
+      - expression_is_true:
+          name: stg_overtime_not_negative
+          expression: "overtime >= 0"
+          config:
+            severity: warn
+      - expression_is_true:
+          name: stg_salaries_not_negative
+          expression: "salaries >= 0"
+          config:
+            severity: warn
+    columns:
+      - name: employee_identifier
+        data_tests:
+          - not_null
+      - name: department_code
+        data_tests:
+          - not_null
+      - name: department
+        data_tests:
+          - not_null
+      - name: year_type
+        data_tests:
+          - accepted_values:
+              values: ['Calendar']
+      - name: employee_type
+        data_tests:
+          - accepted_values:
+              values:
+                - Permanent Civil Service
+                - Temporary Civil Service
+                - Temporary Provisional
+                - Permanent Exempt
+                - Temporary Exempt
+                - Other
+              config:
+                severity: warn
+      - name: total_compensation
+        data_tests:
+          - not_null
